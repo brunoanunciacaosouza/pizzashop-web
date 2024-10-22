@@ -1,7 +1,7 @@
-import { Link } from "react-router-dom";
 import { Home, Pizza, UtensilsCrossed } from "lucide-react";
 import { Separator } from "./ui/separator";
 import { NavLink } from "./navlink";
+import { ThemeToggle } from "./theme/mode-toggle";
 
 export function Header() {
   return (
@@ -16,12 +16,15 @@ export function Header() {
             <Home className="h-4 w-5" />
             Início
           </NavLink>
-
           <NavLink to="/orders">
             <UtensilsCrossed className="h-4 w-5" />
             Pedidos
           </NavLink>
         </nav>
+
+        <div className="ml-auto flex items-center gap-2">
+          <ThemeToggle />
+        </div>
       </div>
     </div>
   );

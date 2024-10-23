@@ -11,14 +11,13 @@ import { Button } from "@/components/ui/button";
 import { useMutation } from "@tanstack/react-query";
 import { registerRestaurant } from "@/api/register-restaurant";
 
-const signInForm = z.object({
-  restauranteName: z.string(),
+const signUpForm = z.object({
+  restaurantName: z.string(),
   managerName: z.string(),
   phone: z.string(),
   email: z.string().email(),
 });
-
-type SignUpForm = z.infer<typeof signInForm>;
+type SignUpForm = z.infer<typeof signUpForm>;
 
 export function SignUp() {
   const navigate = useNavigate();
@@ -35,7 +34,7 @@ export function SignUp() {
   async function handleSignUp(data: SignUpForm) {
     try {
       await registerRestauranteFn({
-        restaurantName: data.restauranteName,
+        restaurantName: data.restaurantName,
         managerName: data.managerName,
         email: data.email,
         phone: data.phone,
@@ -73,11 +72,11 @@ export function SignUp() {
 
           <form className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="restauranteName">Nome do estabelecimento</Label>
+              <Label htmlFor="restaurantName">Nome do estabelecimento</Label>
               <Input
-                id="restauranteName"
+                id="restaurantName"
                 type="text"
-                {...register("restauranteName")}
+                {...register("restaurantName")}
               />
             </div>
 

@@ -8,6 +8,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 
+import { useMutation } from "@tanstack/react-query";
+import { registerRestaurant } from "@/api/register-restaurant";
+
 const signInForm = z.object({
   restauranteName: z.string(),
   managerName: z.string(),
@@ -19,16 +22,29 @@ type SignUpForm = z.infer<typeof signInForm>;
 
 export function SignUp() {
   const navigate = useNavigate();
-  const { register, handleSubmit } = useForm<SignUpForm>();
+  const {
+    register,
+    handleSubmit,
+    formState: { isSubmitting },
+  } = useForm<SignUpForm>();
+
+  const { mutateAsync: registerRestauranteFn } = useMutation({
+    mutationFn: registerRestaurant,
+  });
 
   async function handleSignUp(data: SignUpForm) {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      await registerRestauranteFn({
+        restaurantName: data.restauranteName,
+        managerName: data.managerName,
+        email: data.email,
+        phone: data.phone,
+      });
 
       toast.success("Restaurante cadastrado com sucesso!", {
         action: {
           label: "Login",
-          onClick: () => navigate("/sign-in"),
+          onClick: () => navigate(`/sign-in?email=${data.email}`),
         },
       });
     } catch (error) {
@@ -88,6 +104,7 @@ export function SignUp() {
               className="w-full"
               type="submit"
               onClick={handleSubmit(handleSignUp)}
+              disabled={isSubmitting}
             >
               Finalizar cadastro
             </Button>

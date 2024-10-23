@@ -9,7 +9,7 @@ import { signIn } from "@/api/sign-in";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 
 const signInForm = z.object({
   email: z.string().email(),
@@ -18,7 +18,17 @@ const signInForm = z.object({
 type SignInForm = z.infer<typeof signInForm>;
 
 export function SignIn() {
-  const { register, handleSubmit } = useForm<SignInForm>();
+  const [searchParams] = useSearchParams();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { isSubmitting },
+  } = useForm<SignInForm>({
+    defaultValues: {
+      email: searchParams.get("email") || "",
+    },
+  });
 
   const { mutateAsync: authenticate } = useMutation({
     mutationFn: signIn,
@@ -67,6 +77,7 @@ export function SignIn() {
             <Button
               className="w-full"
               type="submit"
+              disabled={isSubmitting}
               onClick={handleSubmit(handleSignIn)}
             >
               Acessar painel
